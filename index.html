@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Sagent Songsmith</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=Nunito:wght@500;700;800&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <main class="shell">
+      <section class="topbar">
+        <a class="ghost-button nav-link" href="index.html">Studio</a>
+        <a class="ghost-button nav-link" href="saved.html">Saved Songs</a>
+      </section>
+      <section class="hero">
+        <div class="hero-copy">
+          <p class="eyebrow">Sagent Songsmith</p>
+          <h1>Turn anyone into a singer.</h1>
+          <p class="lede">
+            Upload your vocal take, paste a song link, let the app strip out the
+            original lead vocal, and render a polished cover with your voice on top.
+          </p>
+        </div>
+        <div class="hero-panel">
+          <div class="stat">
+            <span class="stat-label">Audio intake</span>
+            <strong>Any length</strong>
+          </div>
+          <div class="stat">
+            <span class="stat-label">Song cap</span>
+            <strong>~3 minutes</strong>
+          </div>
+          <div class="stat">
+            <span class="stat-label">Output</span>
+            <strong>Playable WAV</strong>
+          </div>
+        </div>
+      </section>
+
+      <section class="workspace">
+        <div class="upload-panel">
+          <div class="cover-panel" id="coverPanel">
+            <div class="section-head compact-head">
+              <p class="eyebrow">Singer Studio</p>
+              <h2>Bring your voice to an existing song</h2>
+            </div>
+
+            <div class="cover-grid">
+              <div class="vocal-input-panel">
+                <label class="dropzone mini-dropzone" id="vocalDropzone" for="vocalFile">
+                  <input id="vocalFile" type="file" accept="audio/*" hidden />
+                  <span class="dropzone-title">Load a vocal from this device</span>
+                  <span class="dropzone-subtitle">
+                    Pick any test take from your phone or laptop. A dry take works best.
+                  </span>
+                </label>
+
+                <div class="vocal-option-row">
+                  <button id="recordVocalBtn" class="ghost-button" type="button">
+                    Sing Here
+                  </button>
+                  <button id="stopVocalBtn" class="ghost-button" type="button" disabled>
+                    Stop
+                  </button>
+                </div>
+
+                <p class="inline-note compact-note" id="recordingNote">
+                  Choose either option: upload a take, or sing directly in the browser.
+                </p>
+              </div>
+
+              <label class="dropzone mini-dropzone" id="songDropzone" for="songFile">
+                <input id="songFile" type="file" accept="audio/*" hidden />
+                <span class="dropzone-title">Upload the song audio</span>
+                <span class="dropzone-subtitle">
+                  Use a full mix or instrumental. Stereo songs get an approximate vocal/music split.
+                </span>
+              </label>
+            </div>
+
+            <div class="url-row">
+              <input
+                id="songUrl"
+                type="url"
+                placeholder="Paste a YouTube song link or direct audio URL"
+                aria-label="Song URL"
+              />
+              <button id="fetchSongUrlBtn" class="ghost-button" type="button">
+                Import Song
+              </button>
+            </div>
+
+            <label class="inline-toggle" for="karaokeToggle">
+              <input id="karaokeToggle" type="checkbox" />
+              <span>This link is already karaoke or instrumental, so skip vocal extraction.</span>
+            </label>
+
+            <p class="inline-note" id="songUrlNote">
+              Paste a YouTube song link or direct audio URL and the local backend will fetch it. Karaoke links can skip
+              stem separation, and full songs still get the lead vocal removed for your cover render.
+            </p>
+
+            <div class="dual-file-cards">
+              <div class="file-card">
+                <div>
+                  <p class="file-label">Singer take</p>
+                  <p class="file-meta" id="vocalMeta">No vocal loaded yet.</p>
+                </div>
+                <audio id="vocalPreview" controls></audio>
+              </div>
+
+              <div class="file-card">
+                <div>
+                  <p class="file-label">Song source</p>
+                  <p class="file-meta" id="songMeta">No song source loaded yet.</p>
+                </div>
+                <audio id="songPreview" controls></audio>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="control-panel">
+          <div class="section-head">
+            <p class="eyebrow">Controls</p>
+            <h2 id="controlTitle">Shape your cover before rendering</h2>
+          </div>
+          <div class="style-grid" id="styleGrid" role="radiogroup" aria-label="Song style">
+            <button class="style-chip active" data-style="electro-pop" type="button">
+              Electro Pop
+            </button>
+            <button class="style-chip" data-style="lo-fi" type="button">Lo-Fi</button>
+            <button class="style-chip" data-style="trap" type="button">Trap</button>
+            <button class="style-chip" data-style="cinematic" type="button">
+              Cinematic
+            </button>
+            <button class="style-chip" data-style="house" type="button">House</button>
+            <button class="style-chip" data-style="indie" type="button">Indie</button>
+          </div>
+
+          <div class="sliders">
+            <label>
+              <span id="lengthLabel">Cover length</span>
+              <input id="lengthRange" type="range" min="75" max="180" value="150" />
+              <strong id="lengthValue">150s</strong>
+            </label>
+            <label>
+              <span id="energyLabel">Polish</span>
+              <input id="energyRange" type="range" min="20" max="100" value="72" />
+              <strong id="energyValue">72%</strong>
+            </label>
+          </div>
+
+          <button id="generateBtn" class="primary-button" type="button">
+            Build my cover
+          </button>
+        </div>
+      </section>
+
+      <section class="status-panel">
+        <div class="section-head">
+          <p class="eyebrow">Pipeline</p>
+          <h2>What the app is doing</h2>
+        </div>
+        <ol class="status-list" id="statusList">
+          <li class="pending" data-cover="Waiting for vocal and song">Waiting for vocal and song</li>
+          <li class="pending" data-cover="Loading and trimming both takes">Loading and trimming both takes</li>
+          <li class="pending" data-cover="Separating the song and detecting key">Separating the song and detecting key</li>
+          <li class="pending" data-cover="Tuning and mixing your vocal">Tuning and mixing your vocal</li>
+          <li class="pending" data-cover="Rendering polished cover">Rendering polished cover</li>
+        </ol>
+        <div class="analysis-card" id="analysisCard">
+          <p class="analysis-empty">
+            Load your vocal and the song audio to see key, stem, and mix notes for the cover render.
+          </p>
+        </div>
+      </section>
+
+      <section class="result-panel">
+        <div class="section-head">
+          <p class="eyebrow">Result</p>
+          <h2>Your singer-ready cover</h2>
+        </div>
+        <div class="result-card">
+          <audio id="resultPreview" controls></audio>
+          <div class="result-actions">
+            <a id="downloadBtn" class="primary-button disabled" download="sagent-song.wav">
+              Download WAV
+            </a>
+            <button id="saveBtn" class="ghost-button" type="button">
+              Save Song
+            </button>
+            <button id="regenerateBtn" class="ghost-button" type="button">
+              Render another pass
+            </button>
+          </div>
+          <p class="footnote">
+            The backend pulls the song, removes the original lead vocal, and keeps
+            the instrumental. Your browser then tunes and blends your take over it.
+          </p>
+        </div>
+      </section>
+    </main>
+
+    <script src="config.js"></script>
+    <script src="app.js"></script>
+  </body>
+</html>

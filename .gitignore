@@ -1,0 +1,11 @@
+backend/__pycache__/
+backend/work/
+backend/public/instrumentals/
+backend/public/vocals/
+!backend/public/instrumentals/.gitkeep
+!backend/public/vocals/.gitkeep
+*.pyc
+*.pyo
+*.pyd
+Thumbs.db
+.DS_Store
